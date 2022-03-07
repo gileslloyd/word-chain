@@ -1,0 +1,25 @@
+#!./venv/bin/python
+
+
+import argparse
+from src.app import App
+
+
+def main():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('-d', '--DictionaryFile', help='The path to the input dictionary file', required=True)
+    parser.add_argument('-s', '--StartWord', help='A four letter word from the dictionary to start', required=True)
+    parser.add_argument('-e', '--EndWord', help='A four letter word from the dictionary to end', required=True)
+    parser.add_argument('-r', '--ResultFile', help='The target file to write the result to', required=True)
+
+    args = parser.parse_args()
+
+    app = App(args.DictionaryFile)
+    app.get_word_chain(args.StartWord, args.EndWord)
+
+    # print(args.ResultFile)
+
+
+if __name__ == "__main__":
+    main()
