@@ -1,11 +1,9 @@
-import string
-
 import networkx as nx
 import pandas as pd
 
 
 class NetworkFactory:
-    def from_file(self, file_path: string) -> nx.Graph:
+    def from_file(self, file_path: str) -> nx.Graph:
         words = pd.read_csv(file_path, header=None)
 
         words = words[words[0].str.len() == 4]
