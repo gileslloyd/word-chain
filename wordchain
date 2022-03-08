@@ -19,7 +19,8 @@ def main():
 
     try:
         app = App(args.DictionaryFile)
-        app.get_word_chain(args.StartWord, args.EndWord)
+        app.run(args.StartWord, args.EndWord, args.ResultFile)
+        print(colored(f'Result written to data/{args.ResultFile}', 'green'))
     except ValidationError as e:
         print(colored(e, 'red'))
         exit(1)
