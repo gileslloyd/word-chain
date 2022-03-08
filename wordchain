@@ -10,19 +10,39 @@ from src.application.validation import ValidationError
 def main():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-d', '--DictionaryFile', help='The path to the input dictionary file', required=True)
-    parser.add_argument('-s', '--StartWord', help='A four letter word from the dictionary to start', required=True)
-    parser.add_argument('-e', '--EndWord', help='A four letter word from the dictionary to end', required=True)
-    parser.add_argument('-r', '--ResultFile', help='The target file to write the result to', required=True)
+    parser.add_argument(
+        "-d",
+        "--DictionaryFile",
+        help="The path to the input dictionary file",
+        required=True,
+    )
+    parser.add_argument(
+        "-s",
+        "--StartWord",
+        help="A four letter word from the dictionary to start",
+        required=True,
+    )
+    parser.add_argument(
+        "-e",
+        "--EndWord",
+        help="A four letter word from the dictionary to end",
+        required=True,
+    )
+    parser.add_argument(
+        "-r",
+        "--ResultFile",
+        help="The target file to write the result to",
+        required=True,
+    )
 
     args = parser.parse_args()
 
     try:
         app = App(args.DictionaryFile)
         app.run(args.StartWord, args.EndWord, args.ResultFile)
-        print(colored(f'Result written to data/{args.ResultFile}', 'green'))
+        print(colored(f"Result written to data/{args.ResultFile}", "green"))
     except ValidationError as e:
-        print(colored(e, 'red'))
+        print(colored(e, "red"))
         exit(1)
 
 

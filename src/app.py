@@ -14,14 +14,14 @@ class App:
         self._word_chain_service = WordChainService(self._word_graph)
 
     def run(self, start_word: str, end_word: str, result_file: str) -> None:
-        filepath = f'./data/{result_file}'
+        filepath = f"./data/{result_file}"
         directory = os.path.dirname(filepath)
 
         if not os.path.exists(directory):
             Path(directory).mkdir(parents=True, exist_ok=True)
 
-        with open(filepath, 'w') as output:
-            output.write('\n'.join(self.get_word_chain(start_word, end_word)))
+        with open(filepath, "w") as output:
+            output.write("\n".join(self.get_word_chain(start_word, end_word)))
 
     def get_word_chain(self, start_word: str, end_word: str) -> List[str]:
         start_word = start_word.lower()
