@@ -1,5 +1,9 @@
 import networkx as nx
 import pandas as pd
+from pandarallel import pandarallel
+
+
+pandarallel.initialize()
 
 
 class NetworkFactory:
@@ -9,15 +13,8 @@ class NetworkFactory:
     def from_series(self, words: pd.Series) -> nx.Graph:
         word_graph = nx.Graph()
 
-        for word in words:
-            for i in range(0, 4):
-                adjacent_words = words[
-                    words.str.contains(r"{}.{}".format(word[0:i], word[i + 1 :]))
-                    & (words != word)
-                ]
-                word_graph.add_edges_from(
-                    list(zip([word] * len(adjacent_words), adjacent_words))
-                )
+        for i, row in self._get_edge_list(words).iterrows():
+            word_graph.add_edges_from(list(zip([row[0]] * len(row['adj']), row['adj'])))
 
         return word_graph
 
@@ -27,3 +24,17 @@ class NetworkFactory:
         words = words[words[0].str.len() == 4]
 
         return words[words[0].str.contains(r"^[A-Za-z]+")][0].str.lower()
+
+    def _get_edge_list(self, words: pd.Series) -> pd.DataFrame:
+        edge_list = pd.DataFrame(words)
+
+        def find_adjacent_words(word, words):
+            return list(words[words.str.contains(
+                r'({0}[^{1}]+{2}{3}|[^{0}]+{1}{2}{3}|{0}{1}[^{2}]+{3}|{0}{1}{2}[^{3}]+?)'.format(*list(word))
+            )])
+
+        edge_list['adj'] = words.parallel_apply(find_adjacent_words, words=words)
+
+        edge_list.set_index(0)
+
+        return edge_list
